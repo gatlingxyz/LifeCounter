@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="12dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_life_pool_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Add to or Subtract from life" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/dialog_life_pool_exact"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:inputType="numberSigned"
+            android:maxLength="3"
+            android:textSize="25sp" />
+
+        <ImageView
+            android:id="@+id/dialog_life_pool_rotate"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_margin="48dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_screen_rotation_black_24dp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/dialog_life_pool_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"
+        android:textAllCaps="true"
+        android:padding="16dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:text="Calculate!" />
+
+</LinearLayout>

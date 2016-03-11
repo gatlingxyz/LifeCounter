@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/life_pool_total"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="20"
+        android:textColor="@android:color/black"
+        android:textSize="80sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.AppCompatSeekBar
+        android:id="@+id/life_pool_seeker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="50"
+        android:progress="20" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/life_pool_modifier_sign_button"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:text="Negative" />
+
+
+        <LinearLayout
+            style="@style/LifePool.Layout"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/life_pool_modifier_one"
+                style="@style/LifePool.Modifier"
+                android:tag="1" />
+
+            <TextView
+                android:id="@+id/life_pool_modifier_two"
+                style="@style/LifePool.Modifier"
+                android:tag="2" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LifePool.Layout"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/life_pool_modifier_three"
+                style="@style/LifePool.Modifier"
+                android:tag="3" />
+
+            <TextView
+                android:id="@+id/life_pool_modifier_four"
+                style="@style/LifePool.Modifier"
+                android:tag="4" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/life_pool_modifier_five"
+            style="@style/LifePool.Modifier"
+            android:tag="5" />
+
+        <TextView
+            android:id="@+id/life_pool_modifier_six"
+            style="@style/LifePool.Modifier"
+            android:tag="6" />
+
+        <TextView
+            android:id="@+id/life_pool_modifier_seven"
+            style="@style/LifePool.Modifier"
+            android:tag="7" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/life_pool_modifier_eight"
+            style="@style/LifePool.Modifier"
+            android:tag="8" />
+
+        <TextView
+            android:id="@+id/life_pool_modifier_nine"
+            style="@style/LifePool.Modifier"
+            android:tag="9" />
+
+        <TextView
+            android:id="@+id/life_pool_modifier_ten"
+            style="@style/LifePool.Modifier"
+            android:tag="10" />
+    </LinearLayout>
+
+</LinearLayout>

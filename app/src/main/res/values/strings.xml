@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Life Counter</string>
+
+
+    <string name="life_pool_modifier_format_positive">+ %s</string>
+    <string name="life_pool_modifier_format_negative">- %s</string>
+
+    <string name="new_game">New Game</string>
+
+
+</resources>
