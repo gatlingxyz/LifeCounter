@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
                         new LinearLayout.LayoutParams(
                                 ViewGroup.LayoutParams.MATCH_PARENT,
                                 isCurrentGameSolo ? 0 : ViewGroup.LayoutParams.WRAP_CONTENT,
-                                isCurrentGameSolo ? 4.5f : 1f)
+                                isCurrentGameSolo ? 5f : 1f)
                 );
                 break;
         }
