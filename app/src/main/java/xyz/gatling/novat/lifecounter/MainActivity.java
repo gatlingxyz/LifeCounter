@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        onWindowFocusChanged(true);
     }
 
     private void resetLifePools(){
