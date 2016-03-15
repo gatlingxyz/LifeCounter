@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatSeekBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -44,6 +45,7 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         onWindowFocusChanged(true);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private void resetLifePools(){
