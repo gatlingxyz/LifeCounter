@@ -57,14 +57,30 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
         return fragment;
     }
 
+    public void setLife(int number){
+        currentLifePoolValue = number;
+        updateLife();
+    }
+
+    public int getLife(){
+        return currentLifePoolValue;
+    }
+
     public LifePoolFragment(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if(getArguments() != null){
             currentLifePoolValue = getArguments().getInt(KEY_STARTING_POOL, 20);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(KEY_STARTING_POOL, currentLifePoolValue);
+        super.onSaveInstanceState(outState);
     }
 
     @Nullable

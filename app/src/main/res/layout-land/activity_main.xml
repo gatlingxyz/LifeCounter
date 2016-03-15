@@ -8,14 +8,38 @@
         android:id="@+id/life_pool_enemy"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:rotation="180"/>
+        android:layout_weight="1"/>
 
-    <View
-        android:layout_width="2dp"
+    <LinearLayout
+        android:layout_width="72dp"
         android:layout_height="match_parent"
-        android:layout_margin="40dp"
-        android:background="@android:color/holo_red_dark"/>
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        >
+
+        <Button
+            android:id="@+id/button_left"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:text="New Game"/>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_weight="2"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:background="@android:color/holo_red_dark"/>
+
+        <Button
+            android:id="@+id/button_right"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:text="Solo Pool"/>
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/life_pool_player"

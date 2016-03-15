@@ -1,6 +1,7 @@
 package xyz.gatling.novat.lifecounter;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -30,29 +31,42 @@ public class MainActivity extends Activity {
     Button buttonRight;
 
     LifePoolFragment enemy, player;
-    boolean isSolo = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         resetLifePools();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void resetLifePools(){
         resetLifePools(20);
     }
 
-    private void resetLifePools(int lifePoolTotal){
-        enemy = LifePoolFragment.newInstance(lifePoolTotal);
-        player = LifePoolFragment.newInstance(lifePoolTotal);
+    private void resetLifePools(int playerLife){
+        resetLifePools(playerLife, playerLife);
+    }
 
-        getFragmentManager().beginTransaction()
-                .add(R.id.life_pool_enemy, enemy)
-                .add(R.id.life_pool_player, player)
-                .commit();
+    private void resetLifePools(int enemyLife, int playerLife){
+        enemy = (LifePoolFragment) getFragmentManager().findFragmentByTag("enemy");
+        player = (LifePoolFragment) getFragmentManager().findFragmentByTag("player");
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        if(enemy == null){
+            enemy = LifePoolFragment.newInstance(enemyLife);
+            fragmentTransaction.add(R.id.life_pool_enemy, enemy, "enemy");
+        }
+        if(player == null){
+            player = LifePoolFragment.newInstance(playerLife);
+            fragmentTransaction.add(R.id.life_pool_player, player, "player");
+        }
+        fragmentTransaction.disallowAddToBackStack().commit();
     }
 
     @OnClick({R.id.button_left, R.id.button_right})
@@ -132,14 +146,5 @@ public class MainActivity extends Activity {
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
-    }
-
-    public void onSaveInstanceState(Bundle outState){
-        getFragmentManager().putFragment(outState,"enemy", enemy);
-        getFragmentManager().putFragment(outState,"player", player);
-    }
-    public void onRestoreInstanceState(Bundle inState){
-        enemy = (LifePoolFragment)getFragmentManager().getFragment(inState,"enemy");
-        player = (LifePoolFragment)getFragmentManager().getFragment(inState,"player");
     }
 }
