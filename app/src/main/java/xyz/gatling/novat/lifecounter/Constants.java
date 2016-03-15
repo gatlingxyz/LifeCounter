@@ -7,5 +7,7 @@ public class Constants {
 
     public static final int MINIMUM_LIFE = 0;
     public static final int MAXIMUM_LIFE = 50;
+    public static final int DEFAULT_LIFE = 20;
+
 
 }

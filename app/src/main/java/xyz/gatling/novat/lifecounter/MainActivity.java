@@ -26,6 +26,8 @@ import xyz.gatling.novat.lifecounter.Fragments.LifePoolFragment;
  */
 public class MainActivity extends Activity {
 
+
+
     @Bind(R.id.button_left)
     Button buttonLeft;
     @Bind(R.id.button_right)
@@ -38,7 +40,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        resetLifePools();
+        newGame(Constants.DEFAULT_LIFE);
     }
 
     @Override
@@ -48,17 +50,23 @@ public class MainActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    private void resetLifePools(){
-        resetLifePools(20);
+    private void newGame(int startingLife){
+        newGame(startingLife, false);
     }
 
-    private void resetLifePools(int playerLife){
-        resetLifePools(playerLife, playerLife);
+    private void newGame(int startingLife, boolean reset){
+        newGame(startingLife, startingLife, reset);
     }
 
-    private void resetLifePools(int enemyLife, int playerLife){
+    private void newGame(int enemyLife, int playerLife, boolean reset){
+
         enemy = (LifePoolFragment) getFragmentManager().findFragmentByTag("enemy");
         player = (LifePoolFragment) getFragmentManager().findFragmentByTag("player");
+
+        if(reset){
+            enemy.setLife(enemyLife);
+            player.setLife(playerLife);
+        }
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         if(enemy == null){
@@ -76,12 +84,12 @@ public class MainActivity extends Activity {
     public void onClick(View v){
         switch(v.getId()){
             case R.id.button_left: //New game
-                resetLifePools();
+                newGame(Constants.DEFAULT_LIFE, true);
                 break;
             case R.id.button_right: //Single pool
                 boolean isCurrentGameSolo = buttonRight.getTag() != null && (boolean) buttonRight.getTag();
                 ButterKnife.findById(this, R.id.life_pool_enemy).setVisibility(isCurrentGameSolo ? View.VISIBLE : View.GONE);
-                buttonRight.setText(isCurrentGameSolo ? "Solo Pool" : "Two Pools");
+                buttonRight.setText(isCurrentGameSolo ? R.string.two_players : R.string.one_player);
                 buttonRight.setTag(!isCurrentGameSolo);
                 ButterKnife.findById(this, R.id.life_pool_player).setLayoutParams(
                         new LinearLayout.LayoutParams(
@@ -101,11 +109,11 @@ public class MainActivity extends Activity {
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.new_game)
                         .setView(dialogView)
-                        .setPositiveButton("Start!", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 int startingTotal = ((AppCompatSeekBar)ButterKnife.findById(dialogView, R.id.dialog_life_pool_seeker)).getProgress();
-                                resetLifePools(startingTotal);
+                                newGame(startingTotal, true);
                             }
                         })
                         .create().show();

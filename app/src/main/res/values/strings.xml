@@ -6,6 +6,10 @@
     <string name="life_pool_modifier_format_negative">- %s</string>
 
     <string name="new_game">New Game</string>
-
+    <string name="one_player">One Player</string>
+    <string name="two_players">Two Players</string>
+    <string name="start">Start!</string>
+    <string name="negative">Negative</string>
+    <string name="positive">Positive</string>
 
 </resources>

@@ -36,7 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_weight="1"
-            android:text="Negative" />
+            android:text="@string/negative" />
 
 
         <LinearLayout

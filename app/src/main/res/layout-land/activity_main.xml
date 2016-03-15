@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="0dp"
-            android:text="New Game"/>
+            android:text="@string/new_game"/>
 
         <View
             android:layout_width="2dp"
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="0dp"
-            android:text="Solo Pool"/>
+            android:text="@string/two_players"/>
 
     </LinearLayout>
 
