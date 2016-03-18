@@ -3,6 +3,7 @@ package xyz.gatling.novat.lifecounter;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSeekBar;
@@ -101,7 +102,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    @OnLongClick({R.id.button_left})
+    @OnLongClick({R.id.button_left, R.id.button_right})
     public boolean onLongClick(View v){
         switch (v.getId()){
             case R.id.button_left: //New game
@@ -117,6 +118,12 @@ public class MainActivity extends Activity {
                             }
                         })
                         .create().show();
+                break;
+            case R.id.button_right: //One/Two players
+                Intent intent = new Intent(this, MultiManActivity.class);
+                intent.putExtra(Constants.KEY_IS_MULTIMAN, true);
+                startActivity(intent);
+                break;
         }
         return true;
     }

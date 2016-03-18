@@ -29,7 +29,6 @@ import xyz.gatling.novat.lifecounter.R;
  */
 public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
 
-    private final static String KEY_STARTING_POOL = "key_starting_pool";
 
     @Bind(R.id.life_pool_modifier_sign_button)
     Button modifierSign;
@@ -44,6 +43,7 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
 
     int currentLifePoolValue = 20;
     boolean isEnemy = false;
+    boolean isMultiMan = false;
 
     public static LifePoolFragment newInstance(){
         return newInstance(20);
@@ -52,8 +52,14 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
     public static LifePoolFragment newInstance(int startingTotal){
         LifePoolFragment fragment = new LifePoolFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(KEY_STARTING_POOL, startingTotal);
+        bundle.putInt(Constants.KEY_STARTING_POOL, startingTotal);
         fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static LifePoolFragment newMultiManInstance(){
+        LifePoolFragment fragment = newInstance();
+        fragment.getArguments().putBoolean(Constants.KEY_IS_MULTIMAN, true);
         return fragment;
     }
 
@@ -73,13 +79,14 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         if(getArguments() != null){
-            currentLifePoolValue = getArguments().getInt(KEY_STARTING_POOL, 20);
+            currentLifePoolValue = getArguments().getInt(Constants.KEY_STARTING_POOL, 20);
+            isMultiMan = getArguments().getBoolean(Constants.KEY_IS_MULTIMAN, false);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(KEY_STARTING_POOL, currentLifePoolValue);
+        outState.putInt(Constants.KEY_STARTING_POOL, currentLifePoolValue);
         super.onSaveInstanceState(outState);
     }
 
@@ -94,6 +101,8 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
         lifePoolSeeker.setOnSeekBarChangeListener(this);
         lifePoolSeeker.setMax(Constants.MAXIMUM_LIFE);
         lifePoolSeeker.setProgress(currentLifePoolValue);
+        ButterKnife.findById(view, R.id.life_pool_modifiers).setVisibility(isMultiMan ? View.GONE: View.VISIBLE);
+
         return view;
     }
 

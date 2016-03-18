@@ -12,4 +12,6 @@
     <string name="negative">Negative</string>
     <string name="positive">Positive</string>
 
+    <string name="default_player_name_format">Player %s</string>
+
 </resources>
