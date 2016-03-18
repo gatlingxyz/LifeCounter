@@ -152,6 +152,20 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
         return (boolean) modifierSign.getTag();
     }
 
+    @OnClick({R.id.life_pool_minus, R.id.life_pool_plus})
+    public void onPlusOrMinusClicked(View view){
+        switch(view.getId()){
+            case R.id.life_pool_minus:
+                currentLifePoolValue -= 1;
+                break;
+            case R.id.life_pool_plus:
+                currentLifePoolValue += 1;
+                break;
+        }
+
+        lifePoolSeeker.setProgress(currentLifePoolValue);
+    }
+
     @OnClick({R.id.life_pool_modifier_one, R.id.life_pool_modifier_two, R.id.life_pool_modifier_three, R.id.life_pool_modifier_four,
     R.id.life_pool_modifier_five, R.id.life_pool_modifier_six, R.id.life_pool_modifier_seven, R.id.life_pool_modifier_eight,
     R.id.life_pool_modifier_nine, R.id.life_pool_modifier_ten})
