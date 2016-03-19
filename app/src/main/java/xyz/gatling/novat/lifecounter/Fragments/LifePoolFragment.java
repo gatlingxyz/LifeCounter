@@ -10,12 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,47 +26,39 @@ import xyz.gatling.novat.lifecounter.R;
  */
 public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
 
-
-    @Bind(R.id.life_pool_modifier_sign_button)
-    Button modifierSign;
-    @Bind({R.id.life_pool_modifier_one, R.id.life_pool_modifier_two, R.id.life_pool_modifier_three, R.id.life_pool_modifier_four,
-    R.id.life_pool_modifier_five, R.id.life_pool_modifier_six, R.id.life_pool_modifier_seven, R.id.life_pool_modifier_eight,
-    R.id.life_pool_modifier_nine, R.id.life_pool_modifier_ten})
-    List<TextView> modifierViews;
     @Bind(R.id.life_pool_total)
     TextView lifePoolTotal;
     @Bind(R.id.life_pool_seeker)
     AppCompatSeekBar lifePoolSeeker;
+    @Bind(R.id.life_pool_minus)
+    View minusSign;
+    @Bind(R.id.life_pool_plus)
+    View plusSign;
 
-    int currentLifePoolValue = 20;
+    int currentLifePoolValue = Constants.DEFAULT_LIFE;
     boolean isEnemy = false;
     boolean isMultiMan = false;
 
     public static LifePoolFragment newInstance(){
-        return newInstance(20);
+        return newInstance(20, false);
     }
 
-    public static LifePoolFragment newInstance(int startingTotal){
+    public static LifePoolFragment newInstance(int startingTotal) {
+        return newInstance(startingTotal, false);
+    }
+
+    public static LifePoolFragment newInstance(int startingTotal, boolean isMultiMan){
         LifePoolFragment fragment = new LifePoolFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.KEY_STARTING_POOL, startingTotal);
+        bundle.putBoolean(Constants.KEY_IS_MULTIMAN, isMultiMan);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static LifePoolFragment newMultiManInstance(){
-        LifePoolFragment fragment = newInstance();
-        fragment.getArguments().putBoolean(Constants.KEY_IS_MULTIMAN, true);
-        return fragment;
-    }
-
-    public void setLife(int number){
-        currentLifePoolValue = number;
+    public void newGame(int startingLife){
+        currentLifePoolValue = startingLife;
         updateLife();
-    }
-
-    public int getLife(){
-        return currentLifePoolValue;
     }
 
     public LifePoolFragment(){}
@@ -96,69 +85,10 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
         isEnemy = container.getId() == R.id.life_pool_enemy;
         View view = inflater.inflate(R.layout.fragment_life_pool, null);
         ButterKnife.bind(this, view);
-        modifierSign.setTag(true);
-        toggleButton(true);
         lifePoolSeeker.setOnSeekBarChangeListener(this);
         lifePoolSeeker.setMax(Constants.MAXIMUM_LIFE);
-        lifePoolSeeker.setProgress(currentLifePoolValue);
-        ButterKnife.findById(view, R.id.life_pool_modifiers).setVisibility(isMultiMan ? View.GONE: View.VISIBLE);
-
+        updateLife();
         return view;
-    }
-
-    @OnLongClick(R.id.life_pool_total)
-    public boolean onLongClick(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_longpress_life_pool, null);
-        final Dialog dialog = builder.setView(view).create();
-
-//        if(isEnemy){
-//            view.setRotation(180);
-//        }
-
-//        View rotateButton = ButterKnife.findById(view, R.id.dialog_life_pool_rotate);
-        TextView title = ButterKnife.findById(view, R.id.dialog_life_pool_title);
-        View submitButton = ButterKnife.findById(view, R.id.dialog_life_pool_submit);
-
-        title.setText("Add to or Subtract from " + currentLifePoolValue);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int changeInLife = Integer.parseInt(((EditText)view.findViewById(R.id.dialog_life_pool_exact)).getText().toString());
-                currentLifePoolValue += changeInLife;
-                updateLife();
-                dialog.cancel();
-            }
-        });
-
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        dialog.show();
-        return true;
-    }
-
-    private void toggleButton(boolean modifiersAreNegative){
-        for(TextView modifierView : modifierViews){
-            String value = modifierView.getTag().toString();
-            modifierView.setText(
-                    getString(
-                            modifiersAreNegative ? R.string.life_pool_modifier_format_negative : R.string.life_pool_modifier_format_positive,
-                            value
-                    )
-            );
-        }
-    }
-
-    @OnClick(R.id.life_pool_modifier_sign_button)
-    public void onClick(){
-        boolean modifiersAreNegative = !isModifiersNegative();
-        modifierSign.setTag(modifiersAreNegative);
-        modifierSign.setText(modifiersAreNegative ? "Negative" : "Positive");
-        toggleButton(modifiersAreNegative);
-    }
-
-    private boolean isModifiersNegative(){
-        return (boolean) modifierSign.getTag();
     }
 
     @OnClick({R.id.life_pool_minus, R.id.life_pool_plus})
@@ -171,35 +101,58 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
                 currentLifePoolValue += 1;
                 break;
         }
-
-        lifePoolSeeker.setProgress(currentLifePoolValue);
+        updateLife();
     }
 
-    @OnClick({R.id.life_pool_modifier_one, R.id.life_pool_modifier_two, R.id.life_pool_modifier_three, R.id.life_pool_modifier_four,
-    R.id.life_pool_modifier_five, R.id.life_pool_modifier_six, R.id.life_pool_modifier_seven, R.id.life_pool_modifier_eight,
-    R.id.life_pool_modifier_nine, R.id.life_pool_modifier_ten})
-    public void onModifersTapped(View v){
-        boolean modifiersAreNegative = isModifiersNegative();
-        int value = Integer.parseInt(v.getTag().toString());
+    @OnLongClick({R.id.life_pool_minus, R.id.life_pool_plus})
+    public boolean onLongClick(View selectedView){
+        final boolean adding = selectedView.getId() == R.id.life_pool_plus;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        if(modifiersAreNegative) {
-            currentLifePoolValue -= value;
-            if(currentLifePoolValue < Constants.MINIMUM_LIFE){
-                currentLifePoolValue = Constants.MINIMUM_LIFE;
-            }
-        }
-        else{
-            currentLifePoolValue += value;
-            if(currentLifePoolValue > Constants.MAXIMUM_LIFE){
-                currentLifePoolValue = Constants.MAXIMUM_LIFE;
-            }
-        }
+        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_longpress_life_pool, null);
+        final Dialog dialog = builder.setView(view).create();
 
-        lifePoolSeeker.setProgress(currentLifePoolValue);
+        TextView title = ButterKnife.findById(view, R.id.dialog_life_pool_title);
+        View submitButton = ButterKnife.findById(view, R.id.dialog_life_pool_submit);
+
+        title.setText(getString(
+                adding ? R.string.dialog_add_life_format : R.string.dialog_subtract_life_format,
+                currentLifePoolValue));
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int changeInLife = Integer.parseInt(((EditText)view.findViewById(R.id.dialog_life_pool_exact)).getText().toString());
+
+                if(adding){
+                    currentLifePoolValue += changeInLife;
+                }
+                else{
+                    currentLifePoolValue -= changeInLife;
+                }
+
+                if(currentLifePoolValue > Constants.MAXIMUM_LIFE){
+                    currentLifePoolValue = Constants.MAXIMUM_LIFE;
+                }
+                else if (currentLifePoolValue < Constants.MINIMUM_LIFE){
+                    currentLifePoolValue = Constants.MINIMUM_LIFE;
+                }
+                updateLife();
+                dialog.cancel();
+            }
+        });
+
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
+        return true;
     }
+
+
 
     private void updateLife(){
+        lifePoolSeeker.setProgress(currentLifePoolValue);
         lifePoolTotal.setText(String.valueOf(currentLifePoolValue));
+        minusSign.setVisibility(currentLifePoolValue == Constants.MINIMUM_LIFE ? View.INVISIBLE : View.VISIBLE);
+        plusSign.setVisibility(currentLifePoolValue == Constants.MAXIMUM_LIFE ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
@@ -211,12 +164,8 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
+    public void onStartTrackingTouch(SeekBar seekBar) {}
 
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
-    }
+    public void onStopTrackingTouch(SeekBar seekBar) {}
 }

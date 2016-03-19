@@ -15,34 +15,17 @@
         android:textStyle="bold"
         android:textSize="16sp"
         android:padding="8dp"
-        android:fontFamily="sans-serif-condensed"
-        android:text="Add to or Subtract from life" />
+        android:fontFamily="sans-serif-condensed" />
 
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/dialog_life_pool_exact"
-            android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:inputType="numberSigned"
-            android:maxLength="3"
-            android:textSize="25sp" />
-
-        <ImageView
-            android:id="@+id/dialog_life_pool_rotate"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_margin="48dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_screen_rotation_black_24dp" />
-
-    </FrameLayout>
+    <EditText
+        android:id="@+id/dialog_life_pool_exact"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="2"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/dialog_life_pool_submit"
@@ -54,6 +37,6 @@
         android:textAllCaps="true"
         android:padding="16dp"
         android:textColor="@android:color/holo_red_dark"
-        android:text="Calculate!" />
+        android:text="@string/calculate" />
 
 </LinearLayout>
