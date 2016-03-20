@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_multiman_count" android:title="@string/multiman_count_format" app:showAsAction="always"/>
     <item android:id="@+id/menu_new_game" android:title="@string/new_game"/>
     <item android:id="@+id/menu_new_game_life" android:title="@string/new_game_life"/>
 </menu>

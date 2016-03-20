@@ -20,7 +20,9 @@
     <string name="cancel">Cancel</string>
     <string name="change">Change</string>
     <string name="calculate">Calculate!</string>
+    <string name="multiman_dialog_title">How many players?</string>
 
+    <string name="multiman_count_format">%s players</string>
     <string name="dialog_add_life_format">Add to %s</string>
     <string name="dialog_subtract_life_format">Subtract from %s</string>
     <string name="default_player_name_format">Player %s</string>

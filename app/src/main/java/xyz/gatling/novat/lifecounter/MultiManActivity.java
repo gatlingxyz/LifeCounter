@@ -6,6 +6,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,8 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import butterknife.Bind;
@@ -35,7 +35,7 @@ public class MultiManActivity extends BaseActivity {
     @Bind(R.id.multiman_list)
     RecyclerView multimanList;
 
-    List<String> playerNames = new ArrayList<>();
+    SparseArray<String> playerNames = new SparseArray<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,27 +47,39 @@ public class MultiManActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        if(getIntent().getExtras() != null){
-            Bundle extras = getIntent().getExtras();
-            setDefaultPlayerNames(extras.getInt(Constants.KEY_NUMBER_OF_PLAYERS, Constants.DEFAULT_NUMBER_OF_PLAYERS));
-        }
-        else{
-            setDefaultPlayerNames(Constants.DEFAULT_NUMBER_OF_PLAYERS);
-        }
-
         multimanList.setLayoutManager(
                 new LinearLayoutManager(
                         this,
                         LinearLayoutManager.VERTICAL,
                         false));
-        multimanList.setAdapter(new MultiManAdapter(Constants.DEFAULT_LIFE));
+
+        if(getIntent().getExtras() != null){
+            Bundle extras = getIntent().getExtras();
+            init(extras.getInt(Constants.KEY_NUMBER_OF_PLAYERS, Constants.DEFAULT_NUMBER_OF_PLAYERS));
+        }
+        else{
+            init(Constants.DEFAULT_NUMBER_OF_PLAYERS);
+        }
 
     }
 
-    private void setDefaultPlayerNames(int numberOfPlayers){
-        for(int i = 0; i < numberOfPlayers; i++){
-            playerNames.add(getString(R.string.default_player_name_format, String.valueOf(i+1)));
+    private void init(int numberOfPlayers){
+        int size = playerNames.size();
+        if(numberOfPlayers < size){
+            for(int i = 0; i < size; i++){
+                if(i >= numberOfPlayers){
+                    playerNames.removeAt(i);
+                }
+            }
         }
+        else {
+            for (int i = size; i < numberOfPlayers; i++) {
+                playerNames.put(i, getString(R.string.default_player_name_format, String.valueOf(i + 1)));
+            }
+        }
+
+        invalidateOptionsMenu();
+        multimanList.setAdapter(new MultiManAdapter(Constants.DEFAULT_LIFE));
     }
 
     class MultiManViewHolder extends RecyclerView.ViewHolder{
@@ -78,6 +90,7 @@ public class MultiManActivity extends BaseActivity {
         TextView playerName;
 
         private int viewId = -1;
+        private int positon = -1;
 
         public MultiManViewHolder(View view) {
             super(view);
@@ -85,7 +98,8 @@ public class MultiManActivity extends BaseActivity {
             view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
 
-        public void init(String name, int startingLife){
+        public void init(String name, int startingLife, int position){
+            this.positon = position;
             playerName.setText(name);
             viewId = View.generateViewId();
             container.setId(viewId);
@@ -106,7 +120,10 @@ public class MultiManActivity extends BaseActivity {
                     .setPositiveButton(R.string.change, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            textView.setText(editText.getText().toString());
+                            String name = editText.getText().toString();
+                            textView.setText(name);
+                            playerNames.put(positon, name);
+
                         }
                     })
                     .create().show();
@@ -129,7 +146,7 @@ public class MultiManActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(MultiManViewHolder holder, int position) {
-            holder.init(playerNames.get(position), startingLife);
+            holder.init(playerNames.get(position), startingLife, position);
         }
 
         @Override
@@ -142,6 +159,12 @@ public class MultiManActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.multiman, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_multiman_count).setTitle(getString(R.string.multiman_count_format, playerNames.size()));
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -163,6 +186,23 @@ public class MultiManActivity extends BaseActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 int startingTotal = ((AppCompatSeekBar) ButterKnife.findById(dialogView, R.id.dialog_life_pool_seeker)).getProgress();
                                 multimanList.setAdapter(new MultiManAdapter(startingTotal));
+
+                            }
+                        })
+                        .create().show();
+                break;
+            case R.id.menu_multiman_count:
+                final View multimanCount = LayoutInflater.from(this).inflate(R.layout.dialog_longpress_player_name, null);
+                final EditText numberOfPlayersEditText = ButterKnife.findById(multimanCount, R.id.dialog_player_name_edittext);
+                numberOfPlayersEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.multiman_dialog_title)
+                        .setView(multimanCount)
+                        .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int numberOfPlayers = Integer.parseInt(numberOfPlayersEditText.getText().toString());
+                                init(numberOfPlayers);
 
                             }
                         })

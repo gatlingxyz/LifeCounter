@@ -36,7 +36,6 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
     View plusSign;
 
     int currentLifePoolValue = Constants.DEFAULT_LIFE;
-    boolean isEnemy = false;
     boolean isMultiMan = false;
 
     public static LifePoolFragment newInstance(){
@@ -82,7 +81,6 @@ public class LifePoolFragment extends Fragment implements SeekBar.OnSeekBarChang
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        isEnemy = container.getId() == R.id.life_pool_enemy;
         View view = inflater.inflate(R.layout.fragment_life_pool, null);
         ButterKnife.bind(this, view);
         lifePoolSeeker.setOnSeekBarChangeListener(this);
