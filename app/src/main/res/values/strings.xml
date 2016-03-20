@@ -27,4 +27,9 @@
     <string name="dialog_subtract_life_format">Subtract from %s</string>
     <string name="default_player_name_format">Player %s</string>
 
+    <plurals name="mutliman_number_of_players_plural">
+        <item quantity="one">%s player</item>
+        <item quantity="many">%s players</item>
+    </plurals>
+
 </resources>

@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -113,8 +114,8 @@ public class MultiManActivity extends BaseActivity {
             View view = LayoutInflater.from(textView.getContext()).inflate(R.layout.dialog_longpress_player_name, null);
             final EditText editText = ButterKnife.findById(view, R.id.dialog_player_name_edittext);
             editText.setText(textView.getText().toString());
-            editText.setSelection(editText.getText().length());
-            new AlertDialog.Builder(textView.getContext())
+            editText.setSelection(0, editText.getText().length());
+            AlertDialog dialog = new AlertDialog.Builder(textView.getContext())
                     .setView(view)
                     .setNegativeButton(R.string.cancel, null)
                     .setPositiveButton(R.string.change, new DialogInterface.OnClickListener() {
@@ -123,10 +124,11 @@ public class MultiManActivity extends BaseActivity {
                             String name = editText.getText().toString();
                             textView.setText(name);
                             playerNames.put(positon, name);
-
                         }
                     })
-                    .create().show();
+                    .create();
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            dialog.show();
             return true;
         }
     }
@@ -195,7 +197,7 @@ public class MultiManActivity extends BaseActivity {
                 final View multimanCount = LayoutInflater.from(this).inflate(R.layout.dialog_longpress_player_name, null);
                 final EditText numberOfPlayersEditText = ButterKnife.findById(multimanCount, R.id.dialog_player_name_edittext);
                 numberOfPlayersEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                new AlertDialog.Builder(this)
+                AlertDialog countDialog = new AlertDialog.Builder(this)
                         .setTitle(R.string.multiman_dialog_title)
                         .setView(multimanCount)
                         .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
@@ -206,7 +208,9 @@ public class MultiManActivity extends BaseActivity {
 
                             }
                         })
-                        .create().show();
+                        .create();
+                countDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                countDialog.show();
                 break;
         }
         return super.onOptionsItemSelected(item);
