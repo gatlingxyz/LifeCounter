@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Life Counter</string>
+    <string name="app_name">MtG Life Counter</string>
 
 
     <string name="life_pool_modifier_format_positive">+ %s</string>
